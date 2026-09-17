@@ -1,0 +1,38 @@
+.restart-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 200;
+}
+
+.restart-modal {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: 0 12px 0 rgba(45, 42, 74, 0.12);
+}
+
+.restart-modal__title {
+  margin: 0 0 12px;
+  font-size: 1.4rem;
+  color: var(--color-ink);
+}
+
+.restart-modal__body {
+  margin: 0 0 24px;
+  color: color-mix(in srgb, var(--color-ink) 75%, white);
+  line-height: 1.5;
+}
+
+.restart-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}

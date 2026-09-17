@@ -1,0 +1,38 @@
+export const themes = [
+  {
+    id: 'detective',
+    name: 'Detective',
+    emoji: '🕵️',
+    description: 'Crack cases by following the clues in the data.',
+    color: 'var(--color-purple)',
+    status: 'Not started',
+    progress: 0,
+  },
+  {
+    id: 'sales',
+    name: 'Sales',
+    emoji: '🛒',
+    description: 'Run your own shop and track every sale.',
+    color: 'var(--color-coral)',
+    status: 'Not started',
+    progress: 0,
+  },
+  {
+    id: 'health',
+    name: 'Health',
+    emoji: '💪',
+    description: 'Log workouts and see yourself get stronger.',
+    color: 'var(--color-mint)',
+    status: 'Not started',
+    progress: 0,
+  },
+  {
+    id: 'habit',
+    name: 'Habit',
+    emoji: '✅',
+    description: 'Build streaks and stick with good habits.',
+    color: 'var(--color-yellow)',
+    status: 'Not started',
+    progress: 0,
+  },
+]

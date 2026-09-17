@@ -1,0 +1,8 @@
+.interpretation-step {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 24px;
+  box-shadow: 0 6px 0 rgba(45, 42, 74, 0.06);
+}

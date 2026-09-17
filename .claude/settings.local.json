@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Move-Item -Path \"digits-agency\\\\src\\\\App.css\" -Destination \"digits-agency\\\\src\\\\pages\\\\HomeScreen.css\")",
+      "PowerShell(node \"_screenshot2.mjs\" 2>&1)",
+      "PowerShell(node \"_screenshot3.mjs\" 2>&1)",
+      "PowerShell(node \"_check.mjs\" 2>&1)",
+      "PowerShell(node \"_check2.mjs\" 2>&1)",
+      "PowerShell(node \"_debug.mjs\" 2>&1)",
+      "PowerShell(node \"_test.mjs\" 2>&1)",
+      "PowerShell(node \"_engine_test.mjs\" 2>&1)"
+    ]
+  }
+}

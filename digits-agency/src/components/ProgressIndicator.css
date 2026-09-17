@@ -1,0 +1,89 @@
+.progress-indicator {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.progress-step:last-child {
+  flex: 0 0 auto;
+}
+
+.progress-step__node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 88px;
+}
+
+.progress-step__circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  background: color-mix(in srgb, var(--color-purple) 12%, white);
+  color: color-mix(in srgb, var(--color-purple) 55%, var(--color-ink));
+}
+
+.progress-step__label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--color-ink) 55%, white);
+  text-align: center;
+}
+
+.progress-step__node--active .progress-step__circle {
+  background: var(--color-yellow);
+  color: var(--color-ink);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-yellow) 35%, transparent);
+}
+
+.progress-step__node--active .progress-step__label {
+  color: var(--color-ink);
+}
+
+.progress-step__node--done .progress-step__circle {
+  background: var(--color-purple);
+  color: #fff;
+}
+
+.progress-step__node--done .progress-step__label {
+  color: var(--color-ink);
+}
+
+.progress-step__connector {
+  height: 4px;
+  width: 40px;
+  margin: 0 4px 24px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-purple) 15%, white);
+}
+
+.progress-step__connector--done {
+  background: var(--color-purple);
+}
+
+@media (max-width: 640px) {
+  .progress-step__node {
+    width: 60px;
+  }
+
+  .progress-step__label {
+    font-size: 0.7rem;
+  }
+
+  .progress-step__connector {
+    width: 20px;
+  }
+}

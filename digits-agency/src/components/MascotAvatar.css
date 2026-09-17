@@ -1,0 +1,31 @@
+.mascot-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-yellow) 35%, white);
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.mascot-avatar__base {
+  line-height: 1;
+}
+
+.mascot-avatar__outfit {
+  position: absolute;
+  bottom: -4px;
+  right: -6px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 0 rgba(45, 42, 74, 0.14);
+  font-size: 1.05rem;
+}

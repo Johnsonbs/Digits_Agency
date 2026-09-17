@@ -1,0 +1,131 @@
+.store {
+  min-height: 100vh;
+  width: 100%;
+  padding: 32px 24px 64px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.store__preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.store__preview-label {
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.store__intro {
+  font-size: 1.05rem;
+  color: var(--color-ink);
+  margin: 0 0 28px;
+  max-width: 60ch;
+}
+
+.store__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.store-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 24px 16px;
+  box-shadow: 0 6px 0 rgba(45, 42, 74, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.store-card--bought {
+  transform: scale(1.05);
+}
+
+.store-card__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.store-card__category {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--color-ink) 50%, white);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.store-card__name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--color-ink);
+  margin-bottom: 6px;
+}
+
+.store-card__buy {
+  width: 100%;
+  min-height: 44px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-purple);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.store-card__buy:hover {
+  transform: translateY(-1px);
+}
+
+.store-card__buy--secondary {
+  background: color-mix(in srgb, var(--color-sky) 25%, white);
+  color: color-mix(in srgb, var(--color-sky) 65%, var(--color-ink));
+}
+
+.store-card__owned {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-mint) 30%, white);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.store-card__owned--clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.store-card__owned--clickable:hover {
+  transform: translateY(-1px);
+}
+
+.store-card__locked {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-ink) 8%, white);
+  color: color-mix(in srgb, var(--color-ink) 65%, white);
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 0 8px;
+}

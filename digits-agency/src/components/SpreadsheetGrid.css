@@ -1,0 +1,83 @@
+.grid-wrap {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: 0 6px 0 rgba(45, 42, 74, 0.06);
+  overflow-x: auto;
+}
+
+.sheet {
+  border-collapse: separate;
+  border-spacing: 6px;
+  width: 100%;
+  font-family: var(--font-body);
+}
+
+.sheet__letters th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--color-ink) 40%, white);
+  padding-bottom: 2px;
+}
+
+.sheet__label {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--color-ink);
+  padding: 6px 12px 12px;
+  text-align: left;
+}
+
+.sheet__row-number {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--color-ink) 40%, white);
+  width: 28px;
+  text-align: center;
+}
+
+.sheet__cell {
+  min-height: 44px;
+  min-width: 90px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-purple) 6%, white);
+  color: var(--color-ink);
+  font-weight: 600;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.sheet__cell:hover {
+  transform: translateY(-1px);
+}
+
+.sheet__cell--output {
+  background: color-mix(in srgb, var(--color-yellow) 20%, white);
+  text-align: center;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--color-ink) 70%, white);
+}
+
+.sheet__cell--referenced {
+  background: color-mix(in srgb, var(--color-purple) 22%, white);
+}
+
+.sheet__cell--selected {
+  border-color: var(--color-purple);
+}
+
+.sheet__cell--target {
+  border-color: var(--color-purple);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-purple) 25%, transparent);
+}
+
+.sheet__cell--solved {
+  background: color-mix(in srgb, var(--color-yellow) 45%, white);
+  color: var(--color-ink);
+}
+
+.sheet__cell--solved.sheet__cell--target {
+  border-color: color-mix(in srgb, var(--color-yellow) 70%, var(--color-ink));
+}

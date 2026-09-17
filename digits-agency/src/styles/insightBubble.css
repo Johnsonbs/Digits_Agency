@@ -1,0 +1,114 @@
+.insight-mascot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.insight-mascot__avatar {
+  animation: mascot-bob 2.4s ease-in-out infinite;
+}
+
+@keyframes mascot-bob {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .insight-mascot__avatar {
+    animation: none;
+  }
+}
+
+.insight-mascot__name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--color-ink);
+}
+
+.insight-bubble {
+  background: color-mix(in srgb, var(--color-cream) 70%, white);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.insight-bubble--question {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  background: color-mix(in srgb, var(--color-purple) 12%, white);
+}
+
+.insight-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.insight-option {
+  min-height: 48px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-purple) 10%, white);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.insight-option:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--color-purple) 18%, white);
+}
+
+.insight-option--picked {
+  background: color-mix(in srgb, var(--color-purple) 30%, white);
+}
+
+.insight-feedback {
+  margin-top: 8px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  color: var(--color-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.insight-feedback--ideal {
+  background: color-mix(in srgb, var(--color-yellow) 35%, white);
+}
+
+.insight-feedback--nudge {
+  background: color-mix(in srgb, var(--color-sky) 20%, white);
+}
+
+.insight-btn {
+  min-height: 44px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-purple);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.insight-btn:hover {
+  transform: translateY(-1px);
+}

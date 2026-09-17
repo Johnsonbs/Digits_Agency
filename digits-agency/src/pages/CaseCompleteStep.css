@@ -1,0 +1,58 @@
+.case-complete {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 40px 24px;
+}
+
+.case-complete__badge {
+  font-size: 3.5rem;
+}
+
+.case-complete__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--color-ink);
+  margin: 4px 0 0;
+}
+
+.case-complete__subtitle {
+  font-size: 1.1rem;
+  color: var(--color-ink);
+  margin: 0 0 16px;
+}
+
+.case-complete__payout {
+  display: inline-block;
+  margin: 0 0 20px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-yellow) 40%, white);
+  color: var(--color-ink);
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.case-complete__recap {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 20px 28px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 6px 0 rgba(45, 42, 74, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.case-complete__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}

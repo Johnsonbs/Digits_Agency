@@ -1,0 +1,67 @@
+.mission {
+  min-height: 100vh;
+  width: 100%;
+  padding: 32px 24px 64px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.mission__restart-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 4px 0 20px;
+}
+
+.mission__restart-link {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: color-mix(in srgb, var(--color-ink) 55%, white);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.mission__restart-link:hover {
+  background: color-mix(in srgb, var(--color-purple) 8%, white);
+  color: var(--color-ink);
+}
+
+.mission__step {
+  display: flex;
+  justify-content: center;
+}
+
+.mission__step > * {
+  width: 100%;
+}
+
+.mission__coming-soon-card {
+  max-width: 480px;
+  margin: 40px auto 0;
+  text-align: center;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 40px 28px;
+  box-shadow: 0 6px 0 rgba(45, 42, 74, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.mission__coming-soon-card h2 {
+  font-family: var(--font-heading);
+  color: var(--color-ink);
+  margin: 0;
+}
+
+.mission__coming-soon-card p {
+  color: color-mix(in srgb, var(--color-ink) 65%, white);
+  margin: 0;
+}
