@@ -279,7 +279,7 @@ const case4Rows = [
   { suspect: 'Denise', mon: 9, tue: 9, wed: 10 },
   { suspect: 'Oscar', mon: 7, tue: 8, wed: 7 },
 ]
-const CASE4_THRESHOLD = (9 + 9 + 10) / 3 // Denise's own average check-in time
+const case4AverageCheckIn = (row) => (row.mon + row.tue + row.wed) / 3
 
 const case4 = {
   caseNumber: 4,
@@ -302,10 +302,17 @@ const case4 = {
       { key: 'total', label: 'Avg Check-in', letter: 'E', targetable: true },
     ],
     rows: case4Rows,
-    computeTotal: (row) => (row.mon + row.tue + row.wed) / 3,
-    computeMetric: (row) => (row.mon + row.tue + row.wed) / 3,
-    threshold: CASE4_THRESHOLD,
+    computeTotal: case4AverageCheckIn,
     hasGrandTotal: false,
+    // "Earlier" means a *smaller* average check-in time, so this needs its
+    // own comparison direction — the default summary path only ever counts
+    // values *greater* than the threshold, which would (incorrectly) count
+    // suspects who arrive later than Denise, not earlier.
+    computeSummary: (rows) => {
+      const denise = rows.find((r) => r.suspect === 'Denise')
+      const deniseAvg = case4AverageCheckIn(denise)
+      return rows.filter((r) => case4AverageCheckIn(r) < deniseAvg).length
+    },
     summaryQuestion: 'How many suspects check in earlier than Denise, on average?',
   },
   buildInsight(_key, result) {
