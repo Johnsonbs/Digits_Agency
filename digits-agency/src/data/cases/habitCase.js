@@ -21,7 +21,7 @@ const habitCase1 = {
   steps: ['entry', 'cleaning', 'analysis', 'interpretation'],
   brief: {
     problem:
-      "Day one of the reading challenge. Track the minutes, clean up the log, and see if the streak is really on track.",
+      "Day one of the reading challenge. The goal: more than 20 minutes a day counts as Goal Met. Track the minutes, clean up the log, and see if the streak is really on track.",
     blockIds: ['MULTIPLY', 'SUM', 'COUNTIF', 'IF'],
     payout: 50,
   },
@@ -57,6 +57,7 @@ const habitCase1 = {
   },
 
   analysis: {
+    intro: 'The daily goal is 20 minutes. More than 20 is a Goal Met day — 20 or under is Try Again.',
     columns: [
       ...rawColumns,
       { key: 'total', label: 'Total (min)', letter: 'D', targetable: true },

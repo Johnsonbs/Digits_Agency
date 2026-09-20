@@ -2,6 +2,13 @@
   width: 100%;
 }
 
+.analysis-step__intro {
+  font-size: 1.05rem;
+  color: var(--color-ink);
+  margin: 0 0 20px;
+  max-width: 70ch;
+}
+
 .analysis-step__body {
   display: grid;
   grid-template-columns: 280px 1fr;

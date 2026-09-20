@@ -20,7 +20,8 @@ const healthCase1 = {
   title: 'Lace Up',
   steps: ['entry', 'cleaning', 'analysis', 'interpretation'],
   brief: {
-    problem: "Training season starts now. Log the week's workouts and find out which days are really paying off.",
+    problem:
+      "Training season starts now. The plan: any day you run more than 3km keeps you On Track for the 5K. Log the week's workouts and find out which days are really paying off.",
     blockIds: ['MULTIPLY', 'SUM', 'COUNTIF', 'IF'],
     payout: 50,
   },
@@ -55,6 +56,7 @@ const healthCase1 = {
   },
 
   analysis: {
+    intro: 'Training goal: any day you run more than 3km is On Track. 3km or less Needs Work.',
     columns: [
       ...rawColumns,
       { key: 'total', label: 'Total (min)', letter: 'D', targetable: true },

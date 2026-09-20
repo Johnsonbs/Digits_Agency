@@ -25,7 +25,7 @@ const case1 = {
   steps: ['entry', 'cleaning', 'analysis', 'interpretation'],
   brief: {
     problem:
-      "The office candy jar keeps coming up short, and four coworkers had access. Follow the numbers and find out who's really behind it.",
+      "The office candy jar keeps coming up short, and four coworkers had access. Break room rule: anything that sold more than 5 this week counts as Popular. Follow the numbers and find out who's really behind it.",
     blockIds: ['MULTIPLY', 'SUM', 'COUNTIF', 'IF'],
     payout: 50,
   },
@@ -57,6 +57,7 @@ const case1 = {
     textColumnKey: 'city',
   },
   analysis: {
+    intro: 'Break room rule: any snack that sold more than 5 this week is Popular. 5 or fewer is Slow.',
     columns: [
       ...case1RawColumns,
       { key: 'total', label: 'Total', letter: 'D', format: 'currency', targetable: true },
@@ -399,9 +400,11 @@ const case6Rows = [
   { suspect: 'Priya', bill: 24, people: 2 },
   { suspect: 'Marcus', bill: 40, people: 2 },
   { suspect: 'Denise', bill: 36, people: 2 },
-  { suspect: 'Oscar', bill: 30, people: 2 },
+  { suspect: 'Oscar', bill: 28, people: 2 },
 ]
-const CASE6_THRESHOLD = 15 // Oscar's own fair share
+// An office policy, not tied to any single suspect's own numbers — see the
+// brief and analysis intro, which both state this explicitly.
+const CASE6_THRESHOLD = 15
 
 const case6 = {
   caseNumber: 6,
@@ -411,11 +414,13 @@ const case6 = {
   steps: ['analysis', 'interpretation'],
   brief: {
     problem:
-      "Several supply bills were split two ways. Divide each bill to find the fair share, then flag the bigger ones.",
+      "Several supply bills were split two ways. Office policy: any fair share over $15 needs manager sign-off — that's a Big Bill. Divide each bill to find the fair share, then flag the big ones.",
     blockIds: ['DIVIDE', 'SUM', 'COUNTIF', 'IF'],
     payout: 55,
   },
   analysis: {
+    intro:
+      "Office policy: any fair share over $15 needs manager sign-off — that counts as a Big Bill. $15 or under is Small.",
     columns: [
       { key: 'suspect', label: 'Suspect', letter: 'A' },
       { key: 'bill', label: 'Bill', letter: 'B', format: 'currency' },
@@ -459,9 +464,11 @@ const case7Rows = [
   { suspect: 'Marcus', amount: 95 },
   { suspect: 'Oscar', amount: 20 },
   { suspect: 'Denise', amount: 18 },
-  { suspect: 'Marcus', amount: 60 },
+  { suspect: 'Marcus', amount: 55 },
 ]
-const CASE7_THRESHOLD = 60 // Marcus's own third purchase
+// A city review-board rule, not tied to any one purchase — see the brief
+// and analysis intro, which both state this explicitly.
+const CASE7_THRESHOLD = 60
 
 const case7 = {
   caseNumber: 7,
@@ -471,11 +478,12 @@ const case7 = {
   steps: ['analysis', 'interpretation'],
   brief: {
     problem:
-      'A city-wide receipt log lists purchases by name. Flag the unusually large ones and count how many there are.',
+      'A city-wide receipt log lists purchases by name. The city flags any single purchase over $60 for review — flag the unusually large ones and count how many there are.',
     blockIds: ['COUNTIF', 'IF'],
     payout: 60,
   },
   analysis: {
+    intro: 'City rule: any single purchase over $60 automatically gets flagged for review.',
     columns: [
       { key: 'suspect', label: 'Name', letter: 'A' },
       { key: 'amount', label: 'Amount', letter: 'B', format: 'currency' },
@@ -645,7 +653,9 @@ const case11Rows = [
   { suspect: 'Denise', evidenceScore: 0 },
   { suspect: 'Oscar', evidenceScore: 1 },
 ]
-const CASE11_THRESHOLD = 1 // Oscar's own score
+// Each red flag from an earlier case adds 1 point — see the brief and
+// analysis intro, which both spell out the rule.
+const CASE11_THRESHOLD = 1
 
 const case11 = {
   caseNumber: 11,
@@ -655,11 +665,12 @@ const case11 = {
   steps: ['analysis', 'interpretation'],
   brief: {
     problem:
-      "Every clue so far — swipes, spending, the alibi, the pattern, the doctored report — gets tallied into one evidence score. See who's really cornered.",
+      "Every red flag from earlier — swipes, spending, the alibi, the pattern, the doctored report — adds 1 point to a suspect's evidence score. Anyone with more than 1 point becomes a Prime Suspect.",
     blockIds: ['IF', 'COUNTIF'],
     payout: 65,
   },
   analysis: {
+    intro: "Each red flag from an earlier case adds 1 point. More than 1 point makes someone a Prime Suspect.",
     columns: [
       { key: 'suspect', label: 'Suspect', letter: 'A' },
       { key: 'evidenceScore', label: 'Evidence Score', letter: 'B' },
@@ -699,7 +710,9 @@ const case12Rows = [
   { suspect: 'Denise', cluesMatched: 1 },
   { suspect: 'Oscar', cluesMatched: 2 },
 ]
-const CASE12_THRESHOLD = 2 // Oscar's own count
+// A suspect matching more than 2 of the season's key clues is declared
+// Guilty — see the brief and analysis intro, which both state this rule.
+const CASE12_THRESHOLD = 2
 
 const case12 = {
   caseNumber: 12,
@@ -709,11 +722,12 @@ const case12 = {
   steps: ['analysis', 'interpretation'],
   brief: {
     problem:
-      "Every case this season pointed somewhere. Review the full timeline and confirm the culprit with the complete evidence trail.",
+      "Every case this season pointed somewhere. A suspect who matches more than 2 of the season's key clues is declared Guilty — review the full timeline and confirm it.",
     blockIds: ['IF', 'COUNTIF'],
     payout: 80,
   },
   analysis: {
+    intro: "A suspect who matches more than 2 of the season's key clues is declared Guilty.",
     columns: [
       { key: 'suspect', label: 'Suspect', letter: 'A' },
       { key: 'cluesMatched', label: 'Clues Matched', letter: 'B' },

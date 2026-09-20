@@ -25,6 +25,7 @@ function resultsMatch(result, expected) {
 
 function AnalysisStep({ initialFormulas, initialResults, onChange, onContinue, config }) {
   const {
+    intro,
     columns,
     rows,
     statusLabels,
@@ -205,6 +206,8 @@ function AnalysisStep({ initialFormulas, initialResults, onChange, onContinue, c
   return (
     <div className="analysis-step">
       {confettiKey && <Confetti key={confettiKey} />}
+
+      {intro && <p className="analysis-step__intro">{intro}</p>}
 
       <FormulaBar
         targetLabel={targetLabel}

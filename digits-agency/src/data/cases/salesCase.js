@@ -27,7 +27,7 @@ const salesCase1 = {
   steps: ['entry', 'cleaning', 'analysis', 'interpretation'],
   brief: {
     problem:
-      "Digit's Corner Store just opened its doors. Enter the day's sales, clean up the register log, and find out what's actually selling.",
+      "Digit's Corner Store just opened its doors. Store rule: anything that sold more than 6 today counts as Popular. Enter the day's sales, clean up the register log, and find out what's actually selling.",
     blockIds: ['MULTIPLY', 'SUM', 'COUNTIF', 'IF'],
     payout: 50,
   },
@@ -62,6 +62,7 @@ const salesCase1 = {
   },
 
   analysis: {
+    intro: 'Store rule: any item that sold more than 6 today is Popular. 6 or fewer is Slow.',
     columns: [
       ...rawColumns,
       { key: 'total', label: 'Total', letter: 'D', format: 'currency', targetable: true },
