@@ -1,0 +1,173 @@
+.auth-screen {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 0 rgba(45, 42, 74, 0.06);
+  padding: 36px 28px;
+}
+
+.auth-card--shake {
+  animation: auth-card-shake 0.4s ease;
+}
+
+@keyframes auth-card-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.auth-card__title {
+  font-family: var(--font-heading);
+  text-align: center;
+  color: var(--color-ink);
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+}
+
+.auth-card__subtitle {
+  text-align: center;
+  color: color-mix(in srgb, var(--color-ink) 55%, white);
+  margin: 0 0 24px;
+  font-size: 0.95rem;
+}
+
+.auth-card__tabs {
+  display: flex;
+  gap: 8px;
+  background: color-mix(in srgb, var(--color-purple) 10%, white);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  margin-bottom: 20px;
+}
+
+.auth-card__tab {
+  flex: 1;
+  min-height: 40px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.auth-card__tab--active {
+  background: var(--color-purple);
+  color: #fff;
+}
+
+.auth-card__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-card__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-ink);
+}
+
+.auth-card__field input {
+  min-height: 44px;
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-ink) 5%, white);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-ink);
+}
+
+.auth-card__field input:focus {
+  outline: 3px solid color-mix(in srgb, var(--color-purple) 40%, white);
+}
+
+.auth-card__error {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-yellow) 35%, white);
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.auth-card__submit {
+  width: 100%;
+}
+
+.auth-card__divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: color-mix(in srgb, var(--color-ink) 45%, white);
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin: 20px 0;
+}
+
+.auth-card__divider::before,
+.auth-card__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-ink) 12%, white);
+}
+
+.auth-card__divider span {
+  padding: 0 12px;
+}
+
+.auth-card__guest {
+  width: 100%;
+}
+
+.auth-card__guest-note {
+  text-align: center;
+  font-size: 0.8rem;
+  color: color-mix(in srgb, var(--color-ink) 50%, white);
+  margin: 12px 0 0;
+}
+
+.auth-card__notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.auth-card__notice p {
+  margin: 0;
+  color: var(--color-ink);
+  font-weight: 600;
+}

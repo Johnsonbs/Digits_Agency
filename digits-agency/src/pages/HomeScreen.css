@@ -16,6 +16,31 @@
   text-align: center;
 }
 
+.home-guest-banner {
+  max-width: 480px;
+  text-align: center;
+  margin: -16px 0 32px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-sky) 20%, white);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.home-guest-banner__link {
+  border: none;
+  background: none;
+  padding: 0;
+  margin-left: 4px;
+  color: var(--color-purple);
+  font-weight: 800;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+}
+
 .theme-grid {
   width: 100%;
   max-width: 720px;

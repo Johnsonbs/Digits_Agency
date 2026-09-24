@@ -46,7 +46,19 @@ function formatDate(timestamp) {
   return new Date(timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
 }
 
-function HomeScreen({ onSelectTheme, onOpenPractice, onUploadProject, onOpenProject, onOpenStore, onOpenBuilder }) {
+function HomeScreen({
+  onSelectTheme,
+  onOpenPractice,
+  onUploadProject,
+  onOpenProject,
+  onOpenStore,
+  onOpenBuilder,
+  onOpenLeaderboard,
+  onOpenAdmin,
+  isGuest,
+  onSignOut,
+  onExitGuest,
+}) {
   const fileInputRef = useRef(null)
   const [uploadError, setUploadError] = useState(null)
   const [confirmDeleteId, setConfirmDeleteId] = useState(null)
@@ -116,6 +128,15 @@ function HomeScreen({ onSelectTheme, onOpenPractice, onUploadProject, onOpenProj
       <CoinBalance balance={getBalance()} />
       <h1 className="title">Digit's Agency</h1>
 
+      {isGuest && (
+        <p className="home-guest-banner">
+          🎭 Playing as a guest — your coins won't show on the leaderboard.{' '}
+          <button type="button" className="home-guest-banner__link" onClick={onExitGuest}>
+            Create a free account
+          </button>
+        </p>
+      )}
+
       <div className="theme-grid">
         {themes.map((theme) => (
           <ThemeCard key={theme.id} theme={withSavedProgress(theme)} onSelect={onSelectTheme} />
@@ -135,6 +156,19 @@ function HomeScreen({ onSelectTheme, onOpenPractice, onUploadProject, onOpenProj
         <button type="button" className="practice-link" onClick={onOpenBuilder}>
           🧮 Builder Tool: Health Score
         </button>
+        <button type="button" className="practice-link" onClick={onOpenLeaderboard}>
+          🏆 Leaderboard
+        </button>
+        {onOpenAdmin && (
+          <button type="button" className="practice-link" onClick={onOpenAdmin}>
+            🛠️ Admin
+          </button>
+        )}
+        {!isGuest && (
+          <button type="button" className="practice-link" onClick={onSignOut}>
+            🚪 Sign Out
+          </button>
+        )}
         <input
           ref={fileInputRef}
           type="file"

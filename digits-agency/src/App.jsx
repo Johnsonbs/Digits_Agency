@@ -5,9 +5,14 @@ import ComparisonSortActivity from './pages/ComparisonSortActivity'
 import FreePlayGrid from './pages/FreePlayGrid'
 import StoreScreen from './pages/StoreScreen'
 import BuilderToolStep from './pages/BuilderToolStep'
+import AuthScreen from './pages/AuthScreen'
+import LeaderboardScreen from './pages/LeaderboardScreen'
+import AdminScreen from './pages/AdminScreen'
 import { loadProject } from './lib/projectStore'
+import { AuthProvider, useAuth } from './lib/AuthContext'
 
-function App() {
+function AppShell() {
+  const { session, isGuest, loading, isAdmin, signOut, exitGuestMode } = useAuth()
   const [screen, setScreen] = useState({ name: 'home' })
 
   const goHome = () => setScreen({ name: 'home' })
@@ -24,6 +29,22 @@ function App() {
   const handleOpenProject = (projectId) => {
     const project = loadProject(projectId)
     if (project) setScreen({ name: 'freeplay', project })
+  }
+
+  if (loading) {
+    return <div className="page" aria-busy="true" />
+  }
+
+  if (!session && !isGuest) {
+    return <AuthScreen />
+  }
+
+  if (screen.name === 'leaderboard') {
+    return <LeaderboardScreen onBack={goHome} />
+  }
+
+  if (screen.name === 'admin' && isAdmin) {
+    return <AdminScreen onBack={goHome} />
   }
 
   if (screen.name === 'mission') {
@@ -54,7 +75,20 @@ function App() {
       onOpenProject={handleOpenProject}
       onOpenStore={() => setScreen({ name: 'store' })}
       onOpenBuilder={() => setScreen({ name: 'builder', toolId: 'health-bmi' })}
+      onOpenLeaderboard={() => setScreen({ name: 'leaderboard' })}
+      onOpenAdmin={isAdmin ? () => setScreen({ name: 'admin' }) : null}
+      isGuest={isGuest}
+      onSignOut={signOut}
+      onExitGuest={exitGuestMode}
     />
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppShell />
+    </AuthProvider>
   )
 }
 

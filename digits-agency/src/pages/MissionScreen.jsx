@@ -12,9 +12,13 @@ import { defaultCaseState, activeStepsFor, stepIndexOf, nextStepAfter } from '..
 import { loadCaseProgress, saveCaseProgress } from '../lib/progressStore'
 import { getCaseConfig, getCaseCount } from '../data/cases'
 import { addCoins } from '../lib/walletStore'
+import { useAuth } from '../lib/AuthContext'
+import { supabase } from '../lib/supabaseClient'
+import { canAccessCase } from '../lib/access'
 import './MissionScreen.css'
 
 function MissionScreen({ themeId, themeName, onBack }) {
+  const { user, isGuest, hasFullAccess } = useAuth()
   const [caseState, setCaseState] = useState(() => loadCaseProgress(themeId) || defaultCaseState(1))
   const [justEarnedCoins, setJustEarnedCoins] = useState(0)
   const [restartTick, setRestartTick] = useState(0)
@@ -23,6 +27,7 @@ function MissionScreen({ themeId, themeName, onBack }) {
   const caseNumber = caseState.caseNumber || 1
   const config = getCaseConfig(themeId, caseNumber)
   const totalCases = getCaseCount(themeId)
+  const unlocked = canAccessCase(themeId, caseNumber, { hasFullAccess })
 
   useEffect(() => {
     saveCaseProgress(themeId, caseState)
@@ -59,6 +64,11 @@ function MissionScreen({ themeId, themeName, onBack }) {
       addCoins(payout)
       setJustEarnedCoins(payout)
       updateCase({ step: 'complete', payoutAwarded: true })
+      if (user && !isGuest && supabase) {
+        supabase.rpc('award_coins', { p_amount: payout }).then(({ error }) => {
+          if (error) console.warn('Could not sync coins to the leaderboard:', error.message)
+        })
+      }
     } else {
       updateCase({ step: 'complete' })
     }
@@ -85,6 +95,24 @@ function MissionScreen({ themeId, themeName, onBack }) {
           <h2>More cases coming soon!</h2>
 
           <p>You've finished every case built for this theme so far — check back later for more.</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!unlocked) {
+    return (
+      <div className="mission mission--coming-soon">
+        <ScreenHeader title={themeName || 'Locked'} onBack={handleHome} backLabel="🏠 Home" />
+        <div className="mission__coming-soon-card">
+          <span aria-hidden="true" style={{ fontSize: '2.5rem' }}>
+            🔒
+          </span>
+          <h2>This case isn't unlocked yet</h2>
+          <p>
+            Case {caseNumber} needs full access. Ask an admin to unlock more cases for you — until then, there's
+            plenty more to explore in the other themes!
+          </p>
         </div>
       </div>
     )
