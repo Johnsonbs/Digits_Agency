@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ScreenHeader from '../components/ScreenHeader'
 import ProgressIndicator from '../components/ProgressIndicator'
 import RestartConfirmModal from '../components/RestartConfirmModal'
@@ -8,6 +8,7 @@ import CleaningStep from './CleaningStep'
 import AnalysisStep from './AnalysisStep'
 import InterpretationStep from './InterpretationStep'
 import CaseCompleteStep from './CaseCompleteStep'
+import CaseListScreen from './CaseListScreen'
 import { defaultCaseState, activeStepsFor, stepIndexOf, nextStepAfter } from '../lib/caseSteps'
 import { loadCaseProgress, saveCaseProgress } from '../lib/progressStore'
 import { getCaseConfig, getCaseCount } from '../data/cases'
@@ -22,7 +23,19 @@ function MissionScreen({ themeId, themeName, onBack }) {
   const [caseState, setCaseState] = useState(() => loadCaseProgress(themeId) || defaultCaseState(1))
   const [justEarnedCoins, setJustEarnedCoins] = useState(0)
   const [restartTick, setRestartTick] = useState(0)
-  const [confirmRestartScope, setConfirmRestartScope] = useState(null) // null | 'step' | 'case'
+  const [confirmRestartScope, setConfirmRestartScope] = useState(null) // null | 'step' | 'case' | 'mission'
+  const [showCaseList, setShowCaseList] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    if (!menuOpen) return undefined
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false)
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [menuOpen])
 
   const caseNumber = caseState.caseNumber || 1
   const config = getCaseConfig(themeId, caseNumber)
@@ -52,6 +65,12 @@ function MissionScreen({ themeId, themeName, onBack }) {
   const handleRestartCase = () => {
     setCaseState({ ...defaultCaseState(caseNumber), payoutAwarded: caseState.payoutAwarded })
     setConfirmRestartScope(null)
+  }
+
+  const handleRestartMission = () => {
+    setCaseState(defaultCaseState(1))
+    setConfirmRestartScope(null)
+    setShowCaseList(true)
   }
 
   const handleNextCase = () => {
@@ -118,6 +137,19 @@ function MissionScreen({ themeId, themeName, onBack }) {
     )
   }
 
+  if (showCaseList) {
+    return (
+      <CaseListScreen
+        themeId={themeId}
+        themeName={themeName}
+        currentCaseNumber={caseNumber}
+        hasFullAccess={hasFullAccess}
+        onBack={() => setShowCaseList(false)}
+        onContinue={() => setShowCaseList(false)}
+      />
+    )
+  }
+
   if (caseState.step === 'complete') {
     return (
       <CaseCompleteStep
@@ -139,6 +171,7 @@ function MissionScreen({ themeId, themeName, onBack }) {
         themeName={themeName}
         onBack={handleHome}
         onStart={() => updateCase({ step: config.steps[0] })}
+        onOpenCaseList={() => setShowCaseList(true)}
       />
     )
   }
@@ -153,20 +186,72 @@ function MissionScreen({ themeId, themeName, onBack }) {
         <RestartConfirmModal
           scope={confirmRestartScope}
           onCancel={() => setConfirmRestartScope(null)}
-          onConfirm={confirmRestartScope === 'step' ? handleRestartStep : handleRestartCase}
+          onConfirm={
+            confirmRestartScope === 'step'
+              ? handleRestartStep
+              : confirmRestartScope === 'mission'
+                ? handleRestartMission
+                : handleRestartCase
+          }
         />
       )}
 
       <ScreenHeader title={title} onBack={handleHome} backLabel="🏠 Home" />
       <ProgressIndicator steps={activeSteps} currentIndex={stepIndex} />
 
-      <div className="mission__restart-row">
-        <button type="button" className="mission__restart-link" onClick={() => setConfirmRestartScope('step')}>
-          ↩ Restart this step
+      <div className="mission__menu-row" ref={menuRef}>
+        <button
+          type="button"
+          className="mission__menu-trigger"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-expanded={menuOpen}
+        >
+          ☰ Menu
         </button>
-        <button type="button" className="mission__restart-link" onClick={() => setConfirmRestartScope('case')}>
-          🔄 Restart this case
-        </button>
+        {menuOpen && (
+          <div className="mission__menu-dropdown">
+            <button
+              type="button"
+              className="mission__menu-item"
+              onClick={() => {
+                setShowCaseList(true)
+                setMenuOpen(false)
+              }}
+            >
+              📋 Case List
+            </button>
+            <button
+              type="button"
+              className="mission__menu-item"
+              onClick={() => {
+                setConfirmRestartScope('step')
+                setMenuOpen(false)
+              }}
+            >
+              ↩ Restart this step
+            </button>
+            <button
+              type="button"
+              className="mission__menu-item"
+              onClick={() => {
+                setConfirmRestartScope('case')
+                setMenuOpen(false)
+              }}
+            >
+              🔄 Restart this case
+            </button>
+            <button
+              type="button"
+              className="mission__menu-item"
+              onClick={() => {
+                setConfirmRestartScope('mission')
+                setMenuOpen(false)
+              }}
+            >
+              🗑️ Restart this mission
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="mission__step">

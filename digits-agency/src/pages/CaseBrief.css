@@ -6,6 +6,25 @@
   margin: 0 auto;
 }
 
+.case-brief__caselist-link {
+  display: block;
+  min-height: 44px;
+  margin: 4px auto 16px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-purple) 10%, white);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.case-brief__caselist-link:hover {
+  background: color-mix(in srgb, var(--color-purple) 18%, white);
+}
+
 .case-brief__card {
   background: #fff;
   border-radius: var(--radius-lg);

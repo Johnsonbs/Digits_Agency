@@ -14,8 +14,8 @@ function friendlyError(message) {
 }
 
 function AuthScreen() {
-  const { signIn, signUp, continueAsGuest } = useAuth()
-  const [mode, setMode] = useState('signin') // 'signin' | 'signup'
+  const { signIn, signUp, continueAsGuest, requestPasswordReset } = useAuth()
+  const [mode, setMode] = useState('signin') // 'signin' | 'signup' | 'forgot'
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -23,6 +23,7 @@ function AuthScreen() {
   const [shake, setShake] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [checkEmail, setCheckEmail] = useState(false)
+  const [resetSent, setResetSent] = useState(false)
 
   const showError = (message) => {
     setError(friendlyError(message))
@@ -33,6 +34,18 @@ function AuthScreen() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
+
+    if (mode === 'forgot') {
+      setSubmitting(true)
+      const { error: resetError } = await requestPasswordReset(email.trim())
+      setSubmitting(false)
+      if (resetError) {
+        showError(resetError.message)
+        return
+      }
+      setResetSent(true)
+      return
+    }
 
     if (mode === 'signup' && username.trim().length < 2) {
       showError('Please choose a username with at least 2 characters.')
@@ -79,6 +92,49 @@ function AuthScreen() {
               Back to Sign In
             </button>
           </div>
+        ) : resetSent ? (
+          <div className="auth-card__notice">
+            <span aria-hidden="true" style={{ fontSize: '2rem' }}>
+              📬
+            </span>
+            <p>If that email has an account, a reset link is on its way. Check your inbox.</p>
+            <button
+              type="button"
+              className="tool-btn tool-btn--purple"
+              onClick={() => {
+                setResetSent(false)
+                setMode('signin')
+              }}
+            >
+              Back to Sign In
+            </button>
+          </div>
+        ) : mode === 'forgot' ? (
+          <form className="auth-card__form" onSubmit={handleSubmit}>
+            <p className="auth-card__subtitle" style={{ margin: '0 0 4px' }}>
+              Enter your email and we'll send you a link to set a new password.
+            </p>
+            <label className="auth-card__field">
+              Email
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </label>
+
+            {error && <p className="auth-card__error">{error}</p>}
+
+            <button type="submit" className="tool-btn tool-btn--purple auth-card__submit" disabled={submitting}>
+              {submitting ? 'One sec…' : 'Send Reset Link'}
+            </button>
+            <button
+              type="button"
+              className="tool-btn tool-btn--ghost auth-card__submit"
+              onClick={() => {
+                setMode('signin')
+                setError(null)
+              }}
+            >
+              Back to Sign In
+            </button>
+          </form>
         ) : (
           <>
             <div className="auth-card__tabs">
@@ -133,6 +189,19 @@ function AuthScreen() {
                 {submitting ? 'One sec…' : mode === 'signup' ? 'Create Account' : 'Sign In'}
               </button>
             </form>
+
+            {mode === 'signin' && (
+              <button
+                type="button"
+                className="auth-card__forgot-link"
+                onClick={() => {
+                  setMode('forgot')
+                  setError(null)
+                }}
+              >
+                Forgot password?
+              </button>
+            )}
 
             <div className="auth-card__divider">
               <span>or</span>

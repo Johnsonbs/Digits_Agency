@@ -9,13 +9,19 @@ const STEP_LABELS = {
   interpretation: '💡 Interpretation',
 }
 
-function CaseBrief({ config, themeName, onBack, onStart }) {
+function CaseBrief({ config, themeName, onBack, onStart, onOpenCaseList }) {
   const { brief, title, caseNumber, steps } = config
   const blocks = brief.blockIds.map(findBlockById).filter(Boolean)
 
   return (
     <div className="case-brief">
       <ScreenHeader title={themeName || 'New Case'} onBack={onBack} backLabel="🏠 Home" />
+
+      {onOpenCaseList && (
+        <button type="button" className="case-brief__caselist-link" onClick={onOpenCaseList}>
+          📋 Back to Case List
+        </button>
+      )}
 
       <div className="case-brief__card">
         <span className="case-brief__tag">Case {caseNumber}</span>

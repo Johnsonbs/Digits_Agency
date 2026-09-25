@@ -125,6 +125,20 @@
   width: 100%;
 }
 
+.auth-card__forgot-link {
+  display: block;
+  margin: 12px auto 0;
+  border: none;
+  background: none;
+  padding: 4px;
+  color: var(--color-purple);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
 .auth-card__divider {
   display: flex;
   align-items: center;

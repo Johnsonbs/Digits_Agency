@@ -11,6 +11,11 @@ const COPY = {
     body: "This clears everything you've done — Entry, Cleaning, and Analysis — and takes you back to the Brief. This can't be undone.",
     confirmLabel: 'Yes, restart the case',
   },
+  mission: {
+    title: 'Restart this whole mission?',
+    body: "This sends you all the way back to Case 1 for this theme, clearing your progress through every case. This can't be undone.",
+    confirmLabel: 'Yes, restart the mission',
+  },
 }
 
 function RestartConfirmModal({ scope, onConfirm, onCancel }) {

@@ -6,20 +6,22 @@ import FreePlayGrid from './pages/FreePlayGrid'
 import StoreScreen from './pages/StoreScreen'
 import BuilderToolStep from './pages/BuilderToolStep'
 import AuthScreen from './pages/AuthScreen'
+import ResetPasswordScreen from './pages/ResetPasswordScreen'
 import LeaderboardScreen from './pages/LeaderboardScreen'
 import AdminScreen from './pages/AdminScreen'
+import CaseListScreen from './pages/CaseListScreen'
 import { loadProject } from './lib/projectStore'
+import { loadCaseProgress } from './lib/progressStore'
 import { AuthProvider, useAuth } from './lib/AuthContext'
 
 function AppShell() {
-  const { session, isGuest, loading, isAdmin, signOut, exitGuestMode } = useAuth()
+  const { session, isGuest, loading, recovering, isAdmin, hasFullAccess, signOut, exitGuestMode } = useAuth()
   const [screen, setScreen] = useState({ name: 'home' })
 
   const goHome = () => setScreen({ name: 'home' })
 
   const handleSelectTheme = (theme) => {
-    console.log(theme.name)
-    setScreen({ name: 'mission', themeId: theme.id, themeName: theme.name })
+    setScreen({ name: 'caselist', themeId: theme.id, themeName: theme.name })
   }
 
   const handleUploadProject = (project) => {
@@ -35,6 +37,10 @@ function AppShell() {
     return <div className="page" aria-busy="true" />
   }
 
+  if (recovering) {
+    return <ResetPasswordScreen />
+  }
+
   if (!session && !isGuest) {
     return <AuthScreen />
   }
@@ -45,6 +51,20 @@ function AppShell() {
 
   if (screen.name === 'admin' && isAdmin) {
     return <AdminScreen onBack={goHome} />
+  }
+
+  if (screen.name === 'caselist') {
+    const currentCaseNumber = loadCaseProgress(screen.themeId)?.caseNumber || 1
+    return (
+      <CaseListScreen
+        themeId={screen.themeId}
+        themeName={screen.themeName}
+        currentCaseNumber={currentCaseNumber}
+        hasFullAccess={hasFullAccess}
+        onBack={goHome}
+        onContinue={() => setScreen({ name: 'mission', themeId: screen.themeId, themeName: screen.themeName })}
+      />
+    )
   }
 
   if (screen.name === 'mission') {

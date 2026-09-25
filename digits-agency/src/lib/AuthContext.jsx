@@ -26,6 +26,7 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null)
   const [isGuest, setIsGuest] = useState(readGuestFlag)
   const [loading, setLoading] = useState(Boolean(supabase))
+  const [recovering, setRecovering] = useState(false)
 
   const fetchProfile = useCallback(async (userId) => {
     if (!supabase || !userId) return
@@ -45,7 +46,8 @@ export function AuthProvider({ children }) {
       setLoading(false)
     })
 
-    const { data: subscription } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    const { data: subscription } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      if (event === 'PASSWORD_RECOVERY') setRecovering(true)
       setSession(nextSession)
       if (nextSession?.user) {
         fetchProfile(nextSession.user.id)
@@ -96,6 +98,18 @@ export function AuthProvider({ children }) {
     setIsGuest(false)
   }, [])
 
+  const requestPasswordReset = useCallback(async (email) => {
+    if (!supabase) return { error: { message: 'Accounts are not available right now.' } }
+    return supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin })
+  }, [])
+
+  const updatePassword = useCallback(async (newPassword) => {
+    if (!supabase) return { error: { message: 'Accounts are not available right now.' } }
+    return supabase.auth.updateUser({ password: newPassword })
+  }, [])
+
+  const completeRecovery = useCallback(() => setRecovering(false), [])
+
   const refreshProfile = useCallback(() => {
     if (session?.user) return fetchProfile(session.user.id)
     return undefined
@@ -108,6 +122,7 @@ export function AuthProvider({ children }) {
       profile,
       isGuest,
       loading,
+      recovering,
       isAdmin: profile?.role === 'admin',
       hasFullAccess: profile?.role === 'admin' || profile?.access_tier === 'full',
       signUp,
@@ -116,8 +131,26 @@ export function AuthProvider({ children }) {
       continueAsGuest,
       exitGuestMode,
       refreshProfile,
+      requestPasswordReset,
+      updatePassword,
+      completeRecovery,
     }),
-    [session, profile, isGuest, loading, signUp, signIn, signOut, continueAsGuest, exitGuestMode, refreshProfile]
+    [
+      session,
+      profile,
+      isGuest,
+      loading,
+      recovering,
+      signUp,
+      signIn,
+      signOut,
+      continueAsGuest,
+      exitGuestMode,
+      refreshProfile,
+      requestPasswordReset,
+      updatePassword,
+      completeRecovery,
+    ]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
