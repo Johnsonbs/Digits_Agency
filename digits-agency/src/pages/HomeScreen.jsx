@@ -4,7 +4,7 @@ import CoinBalance from '../components/CoinBalance'
 import MascotAvatar from '../components/MascotAvatar'
 import { themes } from '../data/themes'
 import { storeItems } from '../data/storeItems'
-import { loadCaseProgress } from '../lib/progressStore'
+import { getFurthestCaseNumber, loadCaseProgress } from '../lib/progressStore'
 import { activeStepsFor, stepIndexOf } from '../lib/caseSteps'
 import { getCaseConfig, getCaseCount } from '../data/cases'
 import { parseCSV, CsvError, MAX_CSV_BYTES } from '../lib/csv'
@@ -13,10 +13,10 @@ import { getBalance, getOwnedItemIds, getEquippedOutfitId, getDisplayedDecoratio
 import './HomeScreen.css'
 
 function withSavedProgress(theme) {
-  const saved = loadCaseProgress(theme.id)
+  const caseNumber = getFurthestCaseNumber(theme.id)
+  const saved = loadCaseProgress(theme.id, caseNumber)
   if (!saved) return theme
 
-  const caseNumber = saved.caseNumber || 1
   const totalCases = getCaseCount(theme.id)
 
   if (saved.step === 'complete') {

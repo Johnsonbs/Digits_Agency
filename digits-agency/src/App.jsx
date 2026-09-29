@@ -11,7 +11,7 @@ import LeaderboardScreen from './pages/LeaderboardScreen'
 import AdminScreen from './pages/AdminScreen'
 import CaseListScreen from './pages/CaseListScreen'
 import { loadProject } from './lib/projectStore'
-import { loadCaseProgress } from './lib/progressStore'
+import { getFurthestCaseNumber } from './lib/progressStore'
 import { AuthProvider, useAuth } from './lib/AuthContext'
 
 function AppShell() {
@@ -54,21 +54,32 @@ function AppShell() {
   }
 
   if (screen.name === 'caselist') {
-    const currentCaseNumber = loadCaseProgress(screen.themeId)?.caseNumber || 1
+    const currentCaseNumber = getFurthestCaseNumber(screen.themeId)
     return (
       <CaseListScreen
         themeId={screen.themeId}
         themeName={screen.themeName}
         currentCaseNumber={currentCaseNumber}
         hasFullAccess={hasFullAccess}
+        isAdmin={isAdmin}
         onBack={goHome}
         onContinue={() => setScreen({ name: 'mission', themeId: screen.themeId, themeName: screen.themeName })}
+        onOpenCase={(caseNumber) =>
+          setScreen({ name: 'mission', themeId: screen.themeId, themeName: screen.themeName, caseNumber })
+        }
       />
     )
   }
 
   if (screen.name === 'mission') {
-    return <MissionScreen themeId={screen.themeId} themeName={screen.themeName} onBack={goHome} />
+    return (
+      <MissionScreen
+        themeId={screen.themeId}
+        themeName={screen.themeName}
+        initialCaseNumber={screen.caseNumber}
+        onBack={goHome}
+      />
+    )
   }
 
   if (screen.name === 'practice') {

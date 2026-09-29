@@ -10,3 +10,13 @@ export function canAccessCase(themeId, caseNumber, { hasFullAccess }) {
   const limit = themeId === RESTRICTED_THEME_ID ? RESTRICTED_CASE_LIMIT : RESTRICTED_OTHER_THEME_LIMIT
   return caseNumber <= limit
 }
+
+// Combines the tier cap above with sequential progress: even a full-access
+// account still has to complete cases in order (no skipping ahead), and can
+// always go back to replay/view/edit anything already reached. Only an
+// admin bypasses both checks entirely, to freely review any case or step.
+export function canEnterCase(themeId, caseNumber, { hasFullAccess, isAdmin, furthestCaseNumber }) {
+  if (isAdmin) return true
+  if (!canAccessCase(themeId, caseNumber, { hasFullAccess })) return false
+  return caseNumber <= furthestCaseNumber
+}

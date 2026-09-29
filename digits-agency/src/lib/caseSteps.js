@@ -34,3 +34,11 @@ export function nextStepAfter(stepKey, config) {
   if (index === -1 || index === config.steps.length - 1) return 'complete'
   return config.steps[index + 1]
 }
+
+// Used for the "Previous Step" nav — returns null at the first step (there's
+// nothing before it to go back to; 'brief' isn't part of the step list).
+export function previousStepBefore(stepKey, config) {
+  const index = config.steps.indexOf(stepKey)
+  if (index <= 0) return null
+  return config.steps[index - 1]
+}

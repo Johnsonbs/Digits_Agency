@@ -6,6 +6,31 @@
   margin: 0 auto;
 }
 
+.mission__nav-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 4px 0 12px;
+}
+
+.mission__nav-link {
+  min-height: 44px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-sky) 18%, white);
+  color: color-mix(in srgb, var(--color-sky) 60%, var(--color-ink));
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.mission__nav-link:hover {
+  background: color-mix(in srgb, var(--color-sky) 30%, white);
+}
+
 .mission__menu-row {
   position: relative;
   display: flex;

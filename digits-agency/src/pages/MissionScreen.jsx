@@ -9,18 +9,21 @@ import AnalysisStep from './AnalysisStep'
 import InterpretationStep from './InterpretationStep'
 import CaseCompleteStep from './CaseCompleteStep'
 import CaseListScreen from './CaseListScreen'
-import { defaultCaseState, activeStepsFor, stepIndexOf, nextStepAfter } from '../lib/caseSteps'
-import { loadCaseProgress, saveCaseProgress } from '../lib/progressStore'
+import { defaultCaseState, activeStepsFor, stepIndexOf, nextStepAfter, previousStepBefore } from '../lib/caseSteps'
+import { loadCaseProgress, saveCaseProgress, getFurthestCaseNumber, clearTheme } from '../lib/progressStore'
 import { getCaseConfig, getCaseCount } from '../data/cases'
 import { addCoins } from '../lib/walletStore'
 import { useAuth } from '../lib/AuthContext'
 import { supabase } from '../lib/supabaseClient'
-import { canAccessCase } from '../lib/access'
+import { canAccessCase, canEnterCase } from '../lib/access'
 import './MissionScreen.css'
 
-function MissionScreen({ themeId, themeName, onBack }) {
-  const { user, isGuest, hasFullAccess } = useAuth()
-  const [caseState, setCaseState] = useState(() => loadCaseProgress(themeId) || defaultCaseState(1))
+function MissionScreen({ themeId, themeName, initialCaseNumber, onBack }) {
+  const { user, isGuest, hasFullAccess, isAdmin } = useAuth()
+  const [viewingCaseNumber, setViewingCaseNumber] = useState(() => initialCaseNumber || getFurthestCaseNumber(themeId))
+  const [caseState, setCaseState] = useState(
+    () => loadCaseProgress(themeId, viewingCaseNumber) || defaultCaseState(viewingCaseNumber)
+  )
   const [justEarnedCoins, setJustEarnedCoins] = useState(0)
   const [restartTick, setRestartTick] = useState(0)
   const [confirmRestartScope, setConfirmRestartScope] = useState(null) // null | 'step' | 'case' | 'mission'
@@ -37,21 +40,28 @@ function MissionScreen({ themeId, themeName, onBack }) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [menuOpen])
 
-  const caseNumber = caseState.caseNumber || 1
+  const caseNumber = viewingCaseNumber
   const config = getCaseConfig(themeId, caseNumber)
   const totalCases = getCaseCount(themeId)
-  const unlocked = canAccessCase(themeId, caseNumber, { hasFullAccess })
+  const furthestCaseNumber = getFurthestCaseNumber(themeId)
+  const tierAllowed = isAdmin || canAccessCase(themeId, caseNumber, { hasFullAccess })
+  const unlocked = canEnterCase(themeId, caseNumber, { hasFullAccess, isAdmin, furthestCaseNumber })
 
   useEffect(() => {
-    saveCaseProgress(themeId, caseState)
-  }, [themeId, caseState])
+    saveCaseProgress(themeId, caseNumber, caseState)
+  }, [themeId, caseNumber, caseState])
 
   const updateCase = (partial) => {
     setCaseState((prev) => ({ ...prev, ...partial }))
   }
 
+  const goToCase = (num) => {
+    setViewingCaseNumber(num)
+    setCaseState(loadCaseProgress(themeId, num) || defaultCaseState(num))
+  }
+
   const handleHome = () => {
-    saveCaseProgress(themeId, caseState)
+    saveCaseProgress(themeId, caseNumber, caseState)
     onBack()
   }
 
@@ -68,13 +78,23 @@ function MissionScreen({ themeId, themeName, onBack }) {
   }
 
   const handleRestartMission = () => {
-    setCaseState(defaultCaseState(1))
+    clearTheme(themeId)
+    goToCase(1)
     setConfirmRestartScope(null)
     setShowCaseList(true)
   }
 
   const handleNextCase = () => {
-    setCaseState(defaultCaseState(caseNumber + 1))
+    goToCase(caseNumber + 1)
+  }
+
+  const handlePreviousCase = () => {
+    if (caseNumber > 1) goToCase(caseNumber - 1)
+  }
+
+  const handlePreviousStep = () => {
+    const prev = previousStepBefore(caseState.step, config)
+    if (prev) updateCase({ step: prev })
   }
 
   const handleCaseComplete = () => {
@@ -129,8 +149,9 @@ function MissionScreen({ themeId, themeName, onBack }) {
           </span>
           <h2>This case isn't unlocked yet</h2>
           <p>
-            Case {caseNumber} needs full access. Ask an admin to unlock more cases for you — until then, there's
-            plenty more to explore in the other themes!
+            {!tierAllowed
+              ? "This case needs full access. Ask an admin to unlock more cases for you — until then, there's plenty more to explore in the other themes!"
+              : "Finish the case you're currently on before moving ahead to this one."}
           </p>
         </div>
       </div>
@@ -142,10 +163,18 @@ function MissionScreen({ themeId, themeName, onBack }) {
       <CaseListScreen
         themeId={themeId}
         themeName={themeName}
-        currentCaseNumber={caseNumber}
+        currentCaseNumber={furthestCaseNumber}
         hasFullAccess={hasFullAccess}
+        isAdmin={isAdmin}
         onBack={() => setShowCaseList(false)}
-        onContinue={() => setShowCaseList(false)}
+        onContinue={() => {
+          goToCase(furthestCaseNumber)
+          setShowCaseList(false)
+        }}
+        onOpenCase={(num) => {
+          goToCase(num)
+          setShowCaseList(false)
+        }}
       />
     )
   }
@@ -179,6 +208,8 @@ function MissionScreen({ themeId, themeName, onBack }) {
   const activeSteps = activeStepsFor(config)
   const stepIndex = stepIndexOf(caseState.step, config)
   const title = themeName ? `${themeName} · Case ${caseNumber}: ${config.title}` : config.title
+  const canGoPreviousStep = Boolean(previousStepBefore(caseState.step, config))
+  const canGoPreviousCase = caseNumber > 1
 
   return (
     <div className="mission">
@@ -197,7 +228,26 @@ function MissionScreen({ themeId, themeName, onBack }) {
       )}
 
       <ScreenHeader title={title} onBack={handleHome} backLabel="🏠 Home" />
-      <ProgressIndicator steps={activeSteps} currentIndex={stepIndex} />
+      <ProgressIndicator
+        steps={activeSteps}
+        currentIndex={stepIndex}
+        onStepClick={isAdmin ? (stepKey) => updateCase({ step: stepKey }) : undefined}
+      />
+
+      {(canGoPreviousCase || canGoPreviousStep) && (
+        <div className="mission__nav-row">
+          {canGoPreviousCase && (
+            <button type="button" className="mission__nav-link" onClick={handlePreviousCase}>
+              ◀ Previous Case
+            </button>
+          )}
+          {canGoPreviousStep && (
+            <button type="button" className="mission__nav-link" onClick={handlePreviousStep}>
+              ◀ Previous Step
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="mission__menu-row" ref={menuRef}>
         <button

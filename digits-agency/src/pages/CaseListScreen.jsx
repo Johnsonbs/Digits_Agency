@@ -10,7 +10,16 @@ function statusFor(caseNumber, currentCaseNumber, unlocked) {
   return { label: '⚪ Not Started', className: 'case-list__status--upcoming' }
 }
 
-function CaseListScreen({ themeId, themeName, currentCaseNumber, hasFullAccess, onBack, onContinue }) {
+function CaseListScreen({
+  themeId,
+  themeName,
+  currentCaseNumber,
+  hasFullAccess,
+  isAdmin,
+  onBack,
+  onContinue,
+  onOpenCase,
+}) {
   const totalCases = getCaseCount(themeId)
   const cases = Array.from({ length: totalCases }, (_, i) => i + 1)
     .map((caseNumber) => ({ caseNumber, config: getCaseConfig(themeId, caseNumber) }))
@@ -19,11 +28,15 @@ function CaseListScreen({ themeId, themeName, currentCaseNumber, hasFullAccess, 
   return (
     <div className="page">
       <ScreenHeader title={`${themeName || 'Cases'} · All Cases`} onBack={onBack} backLabel="← Back" />
+      {isAdmin && <p className="case-list__admin-note">🛠️ Admin: every case is open, in any order.</p>}
 
       <div className="case-list">
         {cases.map(({ caseNumber, config }) => {
-          const unlocked = canAccessCase(themeId, caseNumber, { hasFullAccess })
+          const unlocked = isAdmin || canAccessCase(themeId, caseNumber, { hasFullAccess })
           const status = statusFor(caseNumber, currentCaseNumber, unlocked)
+          const isCurrent = caseNumber === currentCaseNumber
+          const canOpen = isAdmin || caseNumber <= currentCaseNumber
+
           return (
             <div key={caseNumber} className="case-list__row">
               <div className="case-list__heading">
@@ -34,9 +47,13 @@ function CaseListScreen({ themeId, themeName, currentCaseNumber, hasFullAccess, 
               <p className="case-list__desc">
                 {unlocked ? config.brief.problem : 'Unlocks once an admin grants full access.'}
               </p>
-              {caseNumber === currentCaseNumber && onContinue && (
-                <button type="button" className="case-list__continue" onClick={onContinue}>
-                  ▶ Continue
+              {canOpen && (
+                <button
+                  type="button"
+                  className="case-list__continue"
+                  onClick={() => (isCurrent ? onContinue?.() : onOpenCase?.(caseNumber))}
+                >
+                  {isCurrent ? '▶ Continue' : caseNumber < currentCaseNumber ? '🔁 Replay / View' : '🛠️ Jump Here'}
                 </button>
               )}
             </div>
