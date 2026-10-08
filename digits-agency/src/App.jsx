@@ -17,6 +17,12 @@ import { AuthProvider, useAuth } from './lib/AuthContext'
 function AppShell() {
   const { session, isGuest, loading, recovering, isAdmin, hasFullAccess, signOut, exitGuestMode } = useAuth()
   const [screen, setScreen] = useState({ name: 'home' })
+  const [authMode, setAuthMode] = useState('signin')
+
+  const handleExitGuest = (mode) => {
+    setAuthMode(mode || 'signin')
+    exitGuestMode()
+  }
 
   const goHome = () => setScreen({ name: 'home' })
 
@@ -42,7 +48,7 @@ function AppShell() {
   }
 
   if (!session && !isGuest) {
-    return <AuthScreen />
+    return <AuthScreen initialMode={authMode} />
   }
 
   if (screen.name === 'leaderboard') {
@@ -110,7 +116,7 @@ function AppShell() {
       onOpenAdmin={isAdmin ? () => setScreen({ name: 'admin' }) : null}
       isGuest={isGuest}
       onSignOut={signOut}
-      onExitGuest={exitGuestMode}
+      onExitGuest={handleExitGuest}
     />
   )
 }

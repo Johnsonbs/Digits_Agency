@@ -104,6 +104,32 @@
   font-family: var(--font-body);
   font-size: 1rem;
   color: var(--color-ink);
+  width: 100%;
+}
+
+.auth-card__password-wrap {
+  position: relative;
+  display: flex;
+}
+
+.auth-card__password-wrap input {
+  padding-right: 44px;
+}
+
+.auth-card__password-toggle {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 40px;
+  min-height: 40px;
+  border: none;
+  background: none;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .auth-card__field input:focus {

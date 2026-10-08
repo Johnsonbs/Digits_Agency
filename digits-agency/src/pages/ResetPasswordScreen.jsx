@@ -6,6 +6,7 @@ function ResetPasswordScreen() {
   const { updatePassword, completeRecovery } = useAuth()
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(null)
   const [shake, setShake] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -61,11 +62,33 @@ function ResetPasswordScreen() {
           <form className="auth-card__form" onSubmit={handleSubmit}>
             <label className="auth-card__field">
               New Password
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <div className="auth-card__password-wrap">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="auth-card__password-toggle"
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
             </label>
             <label className="auth-card__field">
               Confirm Password
-              <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required />
+              <div className="auth-card__password-wrap">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  required
+                />
+              </div>
             </label>
 
             {error && <p className="auth-card__error">{error}</p>}

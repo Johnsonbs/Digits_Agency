@@ -13,12 +13,13 @@ function friendlyError(message) {
   return "That didn't work — please check your details and try again."
 }
 
-function AuthScreen() {
+function AuthScreen({ initialMode = 'signin' }) {
   const { signIn, signUp, continueAsGuest, requestPasswordReset } = useAuth()
-  const [mode, setMode] = useState('signin') // 'signin' | 'signup' | 'forgot'
+  const [mode, setMode] = useState(initialMode) // 'signin' | 'signup' | 'forgot'
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(null)
   const [shake, setShake] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -180,7 +181,22 @@ function AuthScreen() {
               </label>
               <label className="auth-card__field">
                 Password
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <div className="auth-card__password-wrap">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="auth-card__password-toggle"
+                    onClick={() => setShowPassword((s) => !s)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? '🙈' : '👁️'}
+                  </button>
+                </div>
               </label>
 
               {error && <p className="auth-card__error">{error}</p>}

@@ -131,7 +131,11 @@ function HomeScreen({
       {isGuest && (
         <p className="home-guest-banner">
           🎭 Playing as a guest — your coins won't show on the leaderboard.{' '}
-          <button type="button" className="home-guest-banner__link" onClick={onExitGuest}>
+          <button type="button" className="home-guest-banner__link" onClick={() => onExitGuest('signin')}>
+            Sign In
+          </button>{' '}
+          ·{' '}
+          <button type="button" className="home-guest-banner__link" onClick={() => onExitGuest('signup')}>
             Create a free account
           </button>
         </p>
